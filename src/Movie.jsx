@@ -1,9 +1,10 @@
 import React from "react";
 
 const Movie = ({movie1}) => {
+    console.log({movie1})
     return (
-        <div className="container"> 
-        <div className="movie">
+        <div className="movie"> 
+        <div>
             <p>{movie1.Year}</p>
         </div>
         <div>

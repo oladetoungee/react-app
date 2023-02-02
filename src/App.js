@@ -1,48 +1,48 @@
-import React, { useEffect } from "react";
-import  './App.css'
-import SearchButton from './search.svg'
-import Movie from './Movie'
+import React, { useEffect, useState } from "react";
+import "./App.css";
+import SearchButton from "./search.svg";
+import Movie from "./Movie";
+import { getMouseEventOptions } from "@testing-library/user-event/dist/utils";
 // eb3862a
-const API_URL = "https://www.omdbapi.com?apikey=eb3862a"
+const API_URL = "https://www.omdbapi.com?apikey=eb3862a";
 const App = () => {
-    const findMovies = async (title) => {
-        const response = await fetch(`${API_URL}&s=${title}`)
-        const data = await response.json()
-        console.log(data.Search)
-    }
-    const movie1 = 
-        {
-            "Title": "True Romance",
-            "Year": "1993",
-            "imdbID": "tt0108399",
-            "Type": "movie",
-            "Poster": "https://m.media-amazon.com/images/M/MV5BYWRhYWJjNGEtMjNhNi00NzFkLTk1ZGUtNjNmM2FlNTNhNWRjXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_SX300.jpg"
-        }
+  const [movies, setMovies] = useState([]);
+    const [searchTerm, setSearchTerm] = useState("")
+  const findMovies = async (title) => {
+    const response = await fetch(`${API_URL}&s=${title}`);
+    const data = await response.json();
+   
+    setMovies(data.Search);
     
-    useEffect(() => {
-        findMovies('romance')
-    }, [])
-    return(
-     <div className="app">
-         <h1>GeeMovies</h1>
-         <div className="search">
-            <input
-            placeholder="Find your movies here"
-            value="Titanic"
-            onChange={() => {}}
-            />
-            <img
-            src={SearchButton}
-            alt="search"
-            onClick={() => {}}
-            />
-         </div>
-       <div className="container">
-<Movie movie1={movie1}></Movie>
-       </div>
-     </div>
-       
+  };
 
-    )
-}
-export default  App;
+  useEffect(() => {
+    findMovies("Spiderman");
+  }, []);
+  return (
+    <div className="app">
+   
+      <h1>GeeMovies</h1>
+      <div className="search">
+        <input
+          placeholder="Find your movies here"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        <img src={SearchButton} alt="search" onClick={() => findMovies(searchTerm)} />
+      </div>
+      {movies?.length > 0 ? (  <div className="container">
+      
+      {movies.map((movie) => (
+        <Movie movie1={movie} key={movie.imdbID}/>
+      ))}
+    </div>) : (
+        <div className="empty">
+            <h2>NO MOVIES</h2>
+        </div>
+    )}
+    
+    </div>
+  );
+};
+export default App;
